@@ -56,19 +56,19 @@
         buttonGroup.append(deleteButton)
         item.append(buttonGroup)
 
-        doneButton.addEventListener('click', function() {
-            item.classList.toggle('list-group-item-success')
-            localStorage.removeItem('me')
-            saveTodoList()
-        })
+        // doneButton.addEventListener('click', function() {
+        //     item.classList.toggle('list-group-item-success')
+        //     localStorage.removeItem('me')
+        //     saveTodoList()
+        // })
 
-        deleteButton.addEventListener('click', function() {
-            if (confirm('Вы уверены?')) {
-                item.remove()  
-                localStorage.removeItem('me')
-                saveTodoList()
-            }
-        })
+        // deleteButton.addEventListener('click', function() {
+        //     if (confirm('Вы уверены?')) {
+        //         item.remove()  
+        //         localStorage.removeItem('me')
+        //         saveTodoList()
+        //     }
+        // })
         
         return {
             item,
@@ -100,9 +100,13 @@
                     
                     if (e.target.closest('.btn-danger')) {
                         if (confirm('Вы уверены')) {
-                            card.remove()
-                            localStorage.removeItem(storageName)
-                            saveTodoList(storageName)
+                            card.classList.add('todo-remove-animation')
+                            card.addEventListener('animationend', removeItemAfterAnimation, false)
+                            function removeItemAfterAnimation() {
+                                card.remove()  
+                                localStorage.removeItem(storageName)
+                                saveTodoList(storageName)
+                            }
                         }
                     }
                     
@@ -145,10 +149,34 @@
             }
 
             let todoItem = createTodoItem(todoItemForm.input.value)
+
+            todoItem.doneButton.addEventListener('click', function() {
+                todoItem.item.classList.toggle('list-group-item-success')
+                localStorage.removeItem(localStorageItemName)
+                saveTodoList(localStorageItemName)
+            })
+    
+            todoItem.deleteButton.addEventListener('click', function() {
+                if (confirm('Вы уверены?')) {
+                    todoItem.item.classList.add('todo-remove-animation')
+                    todoItem.item.addEventListener('animationend', removeItemAfterAnimation, false)
+                    function removeItemAfterAnimation() {
+                        todoItem.item.remove()  
+                        localStorage.removeItem(localStorageItemName)
+                        saveTodoList(localStorageItemName)
+                    }
+                }
+            })
             
             todoList.append(todoItem.item)
 
-            saveTodoList(localStorageItemName)
+            todoItem.item.classList.add('todo-appearance-animation')
+            todoItem.item.addEventListener('animationend', removeAnimationAndSave, false)
+
+            function removeAnimationAndSave() {
+                todoItem.item.classList.remove('todo-appearance-animation')
+                saveTodoList(localStorageItemName)
+            }
 
             todoItemForm.button.disabled = true
             todoItemForm.input.value = ''

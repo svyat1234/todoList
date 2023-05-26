@@ -1,0 +1,28 @@
+.todo-appearance-animation {
+    animation: appearance 1s ease-in-out;
+}
+.todo-remove-animation {
+    animation: removeAnimation 1s ease-in-out;
+}
+
+@keyframes appearance {
+    0% {
+        opacity: 0;
+        transform: translateY(-40px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes removeAnimation {
+    0% {
+        opacity: 1;
+        transform: translatex(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-200px);
+    }
+}
